@@ -37,10 +37,10 @@ namespace VueStoreApi.Controllers
 
 
             // Set the JWT token in an HttpOnly cookie
-            Response.Cookies.Append("jwt", result.Token, new CookieOptions
+            Response.Cookies.Append("access_token", result.Token, new CookieOptions
             {
                 HttpOnly = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None,
                 Secure = true,
                 Expires = DateTime.UtcNow.AddDays(7),
                 Path = "/"
@@ -64,12 +64,12 @@ namespace VueStoreApi.Controllers
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("access-Token",
+            Response.Cookies.Delete("access_token",
                 new CookieOptions
                 {
                     HttpOnly = true,
                     Secure = true,
-                    SameSite = SameSiteMode.Lax,
+                    SameSite = SameSiteMode.None,
                     Path = "/"
                 });
 
@@ -86,13 +86,9 @@ namespace VueStoreApi.Controllers
         {
             return Ok(new
             {
-                id = User.FindFirst(
-                    ClaimTypes.NameIdentifier)?.Value,
-
-                name = User.Identity?.Name,
-
-                email = User.FindFirst(
-                    ClaimTypes.Email)?.Value
+                IsAuthenticated = User.Identity?.IsAuthenticated,
+                UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+                Email = User.FindFirst(ClaimTypes.Email)?.Value
             });
         }
     }
