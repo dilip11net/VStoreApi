@@ -13,6 +13,8 @@ public class RegisterRequest
     [Required, MinLength(6), StringLength(100)]
     public string Password { get; set; } = string.Empty;
     [Required, MinLength(6), StringLength(100)]
+
+    [Compare(nameof(Password), ErrorMessage = "Passwords do not match.")]
     public string ConfirmPassword { get; set; } = string.Empty;
 }
 

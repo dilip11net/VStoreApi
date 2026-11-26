@@ -31,7 +31,7 @@ public class EnquiriesController(StoreDbContext db) : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<EnquiryResponse>> GetById(int id)
     {
         var e = await db.Enquiries.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
